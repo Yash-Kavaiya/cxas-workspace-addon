@@ -37,6 +37,7 @@ Google Workspace Add-on (Apps Script)
     - Extensions -> Create new deployment -> Add-on
     - In the add-on Settings card, paste your Cloud Run URL + Project ID
 <img width="1144" height="480" alt="image" src="https://github.com/user-attachments/assets/3b288bc8-95bf-4a79-a8cb-ce63f6617b70" />
+<img width="1390" height="873" alt="image" src="https://github.com/user-attachments/assets/7d16db71-efd2-4e8a-8096-f48426e73b64" />
 
 ### 5. Publish to Marketplace
     See docs/marketplace-publishing.md for the full checklist.
