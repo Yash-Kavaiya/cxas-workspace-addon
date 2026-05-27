@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CX Agent Studio — Google Workspace Add-on</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Google Sans, Roboto, sans-serif; background: #f8f9fa; color: #202124; }
+    header { background: #1a1f2e; color: white; padding: 48px 24px; text-align: center; }
+    header h1 { font-size: 2.4em; font-weight: 700; margin-bottom: 8px; }
+    header p { color: #9aa0a6; font-size: 1.1em; }
+    .badges { display: flex; gap: 12px; justify-content: center; margin-top: 20px; flex-wrap: wrap; }
+    .badge { padding: 8px 18px; border-radius: 20px; font-size: 0.85em; font-weight: 600; }
+    .blue { background: #4285F4; } .green { background: #34A853; }
+    .yellow { background: #FBBC04; color: #202124; } .red { background: #EA4335; }
+    main { max-width: 900px; margin: 0 auto; padding: 48px 24px; }
+    .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; margin: 32px 0; }
+    .card { background: white; border-radius: 12px; padding: 28px; box-shadow: 0 1px 3px rgba(0,0,0,.1); }
+    .card h3 { color: #1a73e8; margin-bottom: 10px; font-size: 1.1em; }
+    .card p { color: #5f6368; font-size: 0.95em; line-height: 1.6; }
+    .links { background: white; border-radius: 12px; padding: 32px; box-shadow: 0 1px 3px rgba(0,0,0,.1); margin-top: 32px; }
+    .links h2 { margin-bottom: 20px; color: #202124; }
+    .links a { display: inline-block; margin: 6px 12px 6px 0; color: #1a73e8; text-decoration: none; font-size: 0.95em; }
+    .links a:hover { text-decoration: underline; }
+    footer { text-align: center; padding: 32px; color: #9aa0a6; font-size: 0.85em; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>CX Agent Studio</h1>
+    <p>Google Workspace Add-on powered by cxas-scrapi</p>
+    <div class="badges">
+      <span class="badge blue">Gmail</span>
+      <span class="badge green">Drive</span>
+      <span class="badge yellow">Sheets</span>
+      <span class="badge red">Docs</span>
+    </div>
+  </header>
+  <main>
+    <div class="features">
+      <div class="card">
+        <h3>📋 Agent Management</h3>
+        <p>List, inspect and manage all your CX Agent Studio agents without leaving Google Workspace.</p>
+      </div>
+      <div class="card">
+        <h3>🔍 Lint Checks</h3>
+        <p>Run cxas lint (60+ rules) on agent configs. Lint Drive JSON files with one click.</p>
+      </div>
+      <div class="card">
+        <h3>🧪 Evaluations</h3>
+        <p>Trigger Simulation and Turn Evals. Run evals against test cases in Sheets.</p>
+      </div>
+      <div class="card">
+        <h3>📊 Session Traces</h3>
+        <p>Browse recent sessions and view full conversation traces inline in the sidebar.</p>
+      </div>
+    </div>
+    <div class="links">
+      <h2>Resources</h2>
+      <a href="privacy-policy.html">Privacy Policy</a>
+      <a href="terms-of-service.html">Terms of Service</a>
+      <a href="https://github.com/Yash-Kavaiya/cxas-workspace-addon">GitHub</a>
+      <a href="https://googlecloudplatform.github.io/cxas-scrapi/stable/">cxas-scrapi Docs</a>
+      <a href="https://github.com/GoogleCloudPlatform/cxas-scrapi">cxas-scrapi GitHub</a>
+      <a href="https://twitter.com/genai_guru">@genai_guru on X</a>
+    </div>
+  </main>
+  <footer>Built by Yash Kavaiya (@genai_guru) &mdash; Follow for daily Conversational AI tips!</footer>
+</body>
+</html>

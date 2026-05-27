@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+.env
+cxas-addon-sa-key.json
+*.json.key
+.clasp.json.bak
+node_modules/
+dist/

@@ -1,0 +1,72 @@
+{
+  "timeZone": "Asia/Kolkata",
+  "dependencies": {
+    "libraries": [
+      {
+        "userSymbol": "OAuth2",
+        "version": "43",
+        "libraryId": "1B7FSrk5Zi6L1rSxxTDgDEUsPzlukDsi4KGuTMorsTQHhGBzBkMun4iDF"
+      }
+    ]
+  },
+  "exceptionLogging": "STACKDRIVER",
+  "runtimeVersion": "V8",
+  "addOns": {
+    "common": {
+      "name": "CX Agent Studio",
+      "logoUrl": "https://storage.googleapis.com/cxas-addon-assets/icon128.png",
+      "layoutProperties": {
+        "primaryColor": "#1A73E8",
+        "secondaryColor": "#34A853"
+      },
+      "homepageTrigger": {
+        "runFunction": "onHomepage",
+        "enabled": true
+      },
+      "universalActions": [
+        {
+          "label": "Settings",
+          "runFunction": "openSettings"
+        },
+        {
+          "label": "Help / Docs",
+          "openLink": "https://googlecloudplatform.github.io/cxas-scrapi/stable/"
+        }
+      ]
+    },
+    "gmail": {
+      "contextualTriggers": [
+        {
+          "unconditional": {},
+          "onTriggerFunction": "onGmailMessage"
+        }
+      ]
+    },
+    "drive": {
+      "onItemsSelectedTrigger": {
+        "runFunction": "onDriveItemSelected"
+      }
+    },
+    "sheets": {
+      "homepageTrigger": {
+        "runFunction": "onSheetsHomepage",
+        "enabled": true
+      }
+    },
+    "docs": {
+      "homepageTrigger": {
+        "runFunction": "onDocsHomepage",
+        "enabled": true
+      }
+    }
+  },
+  "oauthScopes": [
+    "https://www.googleapis.com/auth/gmail.readonly",
+    "https://www.googleapis.com/auth/drive.readonly",
+    "https://www.googleapis.com/auth/script.external_request",
+    "https://www.googleapis.com/auth/userinfo.email",
+    "https://www.googleapis.com/auth/spreadsheets.readonly",
+    "https://www.googleapis.com/auth/documents.readonly",
+    "https://www.googleapis.com/auth/script.storage"
+  ]
+}

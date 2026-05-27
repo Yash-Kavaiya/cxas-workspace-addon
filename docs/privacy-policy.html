@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy — CX Agent Studio Workspace Add-on</title>
+  <style>
+    body { font-family: Google Sans, Roboto, sans-serif; max-width: 800px; margin: 40px auto; padding: 0 24px; color: #202124; line-height: 1.7; }
+    h1 { color: #1a73e8; border-bottom: 2px solid #e8f0fe; padding-bottom: 12px; }
+    h2 { color: #202124; margin-top: 32px; }
+    .updated { color: #5f6368; font-size: 0.9em; }
+    a { color: #1a73e8; }
+    ul { padding-left: 24px; }
+    .contact-box { background: #e8f0fe; border-left: 4px solid #1a73e8; padding: 16px 20px; border-radius: 4px; margin-top: 32px; }
+  </style>
+</head>
+<body>
+  <h1>Privacy Policy</h1>
+  <p class="updated">Effective Date: June 1, 2026 &nbsp;|&nbsp; Last Updated: June 1, 2026</p>
+
+  <h2>1. Overview</h2>
+  <p>
+    The <strong>CX Agent Studio</strong> Google Workspace Add-on ("Add-on") is developed and maintained by
+    Yash Kavaiya (@genai_guru). This Privacy Policy explains what data the Add-on accesses, how it is used,
+    and your rights as a user.
+  </p>
+
+  <h2>2. Data We Access</h2>
+  <p>The Add-on requests the following Google Workspace permissions solely to provide its functionality:</p>
+  <ul>
+    <li><strong>gmail.readonly</strong> — Read email metadata to provide context for CX Agent Studio workflows. The Add-on never reads email body content beyond what you explicitly select.</li>
+    <li><strong>drive.readonly</strong> — Read Drive files you select (e.g. JSON agent configs) to run lint checks.</li>
+    <li><strong>spreadsheets.readonly</strong> — Read Sheets data you select for running evaluation test cases.</li>
+    <li><strong>documents.readonly</strong> — Read Docs content you select for contextual agent operations.</li>
+    <li><strong>userinfo.email / userinfo.profile</strong> — Identify the signed-in user to personalise the Add-on experience.</li>
+    <li><strong>script.external_request</strong> — Make outbound HTTP calls to the Add-on's backend service (hosted on Google Cloud Run within your own GCP project).</li>
+    <li><strong>script.storage</strong> — Store your settings (backend URL, project ID) locally in Apps Script user properties.</li>
+  </ul>
+
+  <h2>3. Data We Do NOT Collect</h2>
+  <ul>
+    <li>We do not collect, store, or transmit your email content to any third-party server.</li>
+    <li>We do not sell, rent, or share your data with any third party.</li>
+    <li>We do not track usage analytics beyond what Google Workspace and Cloud Logging provide within your own GCP project.</li>
+    <li>We do not store credentials, tokens, or personal data outside of your own Google user properties and your own GCP project.</li>
+  </ul>
+
+  <h2>4. Backend Service</h2>
+  <p>
+    The Add-on communicates with a Cloud Run backend service that you deploy into your own Google Cloud project
+    (<code>gen-ai-guru-gdg-pune</code> by default). All data sent to this backend stays within your GCP project.
+    The backend uses the <a href="https://github.com/GoogleCloudPlatform/cxas-scrapi">cxas-scrapi</a> library
+    to interact with CX Agent Studio / Dialogflow CX APIs under your credentials.
+  </p>
+
+  <h2>5. Data Retention</h2>
+  <p>
+    Settings stored via Apps Script user properties (backend URL, project ID) are retained until you clear them
+    via the Add-on Settings panel or uninstall the Add-on. No personal data is retained on any external server.
+  </p>
+
+  <h2>6. Security</h2>
+  <p>
+    All communication between the Add-on and the backend is authenticated using Google Identity tokens (OIDC).
+    The Cloud Run service is configured to require authentication and does not allow unauthenticated requests.
+  </p>
+
+  <h2>7. Children's Privacy</h2>
+  <p>This Add-on is not directed at children under 13. We do not knowingly collect data from children.</p>
+
+  <h2>8. Changes to This Policy</h2>
+  <p>We may update this policy. The "Last Updated" date at the top reflects the latest revision.
+  Continued use of the Add-on constitutes acceptance of the updated policy.</p>
+
+  <h2>9. Google API Services User Data Policy</h2>
+  <p>
+    The Add-on's use of information received from Google APIs adheres to the
+    <a href="https://developers.google.com/terms/api-services-user-data-policy">Google API Services User Data Policy</a>,
+    including the Limited Use requirements.
+  </p>
+
+  <div class="contact-box">
+    <strong>Contact</strong><br>
+    For privacy questions or data deletion requests, contact:<br>
+    Yash Kavaiya &mdash; <a href="mailto:yash.kavaiya3@gmail.com">yash.kavaiya3@gmail.com</a><br>
+    GitHub: <a href="https://github.com/Yash-Kavaiya">github.com/Yash-Kavaiya</a>
+  </div>
+</body>
+</html>
