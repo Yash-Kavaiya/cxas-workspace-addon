@@ -1,28 +1,26 @@
 from fastapi import APIRouter, HTTPException
 import os
 
-router = APIRouter()
+router = APIRouter(prefix="/sessions", tags=["sessions"])
 
-@router.get("/{session_id}/trace")
-def get_trace(session_id: str, agent_id: str):
+@router.get("/{agent_id}")
+async def list_sessions(agent_id: str, project_id: str = "", location: str = "us"):
     try:
-        from scrapi.sessions import Sessions
-        project_id = os.environ["PROJECT_ID"]
-        location = os.environ.get("LOCATION", "us-central1")
-        sessions = Sessions(project_id=project_id, location=location)
-        result = sessions.get(agent_id=agent_id, session_id=session_id)
-        return {"trace": result}
+        from cxas_scrapi import Sessions
+        project_id = project_id or os.getenv("PROJECT_ID", "")
+        sessions = Sessions(project_id=project_id, location=location, agent_id=agent_id)
+        result = sessions.list_sessions()
+        return {"sessions": result if isinstance(result, list) else []}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@router.get("/list/{agent_id}")
-def list_sessions(agent_id: str):
+@router.get("/{agent_id}/{session_id}/trace")
+async def get_trace(agent_id: str, session_id: str, project_id: str = "", location: str = "us"):
     try:
-        from scrapi.sessions import Sessions
-        project_id = os.environ["PROJECT_ID"]
-        location = os.environ.get("LOCATION", "us-central1")
-        sessions = Sessions(project_id=project_id, location=location)
-        result = sessions.list(agent_id=agent_id)
-        return {"sessions": result}
+        from cxas_scrapi import Sessions
+        project_id = project_id or os.getenv("PROJECT_ID", "")
+        sessions = Sessions(project_id=project_id, location=location, agent_id=agent_id)
+        result = sessions.get_session(session_id=session_id)
+        return {"trace": result}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

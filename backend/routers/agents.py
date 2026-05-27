@@ -2,56 +2,46 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 import os
 
-router = APIRouter()
+router = APIRouter(prefix="/agents", tags=["agents"])
 
-class AgentPushRequest(BaseModel):
-    agent_config: dict
-    agent_id: str | None = None
+class PushRequest(BaseModel):
+    project_id: str
+    location: str
+    agent_id: str
+    config: dict
 
-@router.get("/")
-def list_agents():
+@router.get("/list")
+async def list_agents():
     try:
-        from scrapi.agents import Agents
-        project_id = os.environ["PROJECT_ID"]
-        location = os.environ.get("LOCATION", "us-central1")
+        from cxas_scrapi import Agents
+        project_id = os.getenv("PROJECT_ID", "")
+        location   = os.getenv("LOCATION", "us")
         agents = Agents(project_id=project_id, location=location)
-        result = agents.list()
-        return {"agents": result}
+        result = agents.list_agents()
+        return {"agents": result if isinstance(result, list) else []}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/{agent_id}")
-def get_agent(agent_id: str):
+async def get_agent(agent_id: str):
     try:
-        from scrapi.agents import Agents
-        project_id = os.environ["PROJECT_ID"]
-        location = os.environ.get("LOCATION", "us-central1")
+        from cxas_scrapi import Agents
+        project_id = os.getenv("PROJECT_ID", "")
+        location   = os.getenv("LOCATION", "us")
         agents = Agents(project_id=project_id, location=location)
-        result = agents.get(agent_id=agent_id)
+        result = agents.get_agent(agent_id=agent_id)
         return {"agent": result}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@router.post("/push")
-def push_agent(req: AgentPushRequest):
-    try:
-        from scrapi.agents import Agents
-        project_id = os.environ["PROJECT_ID"]
-        location = os.environ.get("LOCATION", "us-central1")
-        agents = Agents(project_id=project_id, location=location)
-        result = agents.push(req.agent_config)
-        return {"status": "pushed", "result": result}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
 @router.get("/{agent_id}/versions")
-def list_versions(agent_id: str):
+async def list_versions(agent_id: str):
     try:
-        from scrapi.versions import Versions
-        project_id = os.environ["PROJECT_ID"]
-        location = os.environ.get("LOCATION", "us-central1")
-        versions = Versions(project_id=project_id, location=location)
-        result = versions.list(agent_id=agent_id)
-        return {"versions": result}
+        from cxas_scrapi import Versions
+        project_id = os.getenv("PROJECT_ID", "")
+        location   = os.getenv("LOCATION", "us")
+        versions = Versions(project_id=project_id, location=location, agent_id=agent_id)
+        result = versions.list_versions()
+        return {"versions": result if isinstance(result, list) else []}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

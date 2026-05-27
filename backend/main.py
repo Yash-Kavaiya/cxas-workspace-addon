@@ -1,28 +1,31 @@
-from fastapi import FastAPI, HTTPException, Depends
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from google.auth.transport.requests import Request
-from google.oauth2 import id_token
 import os
-from routers import agents, evals, lint, sessions
 
-app = FastAPI(
-    title="CXAS Workspace Add-on Backend",
-    description="Cloud Run backend for CX Agent Studio Google Workspace Add-on",
-    version="1.0.0"
-)
+app = FastAPI(title="CX Agent Studio Add-on Backend", version="1.0.2")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://script.google.com"],
-    allow_methods=["GET", "POST"],
-    allow_headers=["Authorization", "Content-Type"],
+    allow_origins=["https://script.google.com", "https://script.googleusercontent.com"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
-app.include_router(agents.router, prefix="/agents", tags=["Agents"])
-app.include_router(evals.router, prefix="/evals", tags=["Evals"])
-app.include_router(lint.router, prefix="/lint", tags=["Lint"])
-app.include_router(sessions.router, prefix="/sessions", tags=["Sessions"])
+from routers import agents, evals, lint, sessions
+app.include_router(agents.router)
+app.include_router(evals.router)
+app.include_router(lint.router)
+app.include_router(sessions.router)
 
 @app.get("/health")
 def health():
-    return {"status": "ok", "service": "cxas-addon-backend"}
+    return {"status": "ok", "service": "cxas-addon-backend", "version": "1.0.2"}
+
+@app.get("/info")
+def info():
+    return {
+        "project_id": os.getenv("PROJECT_ID", ""),
+        "location": os.getenv("LOCATION", "us"),
+        "cxas_scrapi": "1.3.0"
+    }

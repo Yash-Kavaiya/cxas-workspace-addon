@@ -2,46 +2,32 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 import os
 
-router = APIRouter()
+router = APIRouter(prefix="/evals", tags=["evals"])
 
 class EvalRequest(BaseModel):
     agent_id: str
-    eval_id: str | None = None
-    conversation: list[dict] | None = None
-    test_cases: list[dict] | None = None
+    project_id: str = ""
+    location: str = "us"
+    eval_id: str = ""
 
 @router.post("/simulation")
-def run_simulation_eval(req: EvalRequest):
+async def run_simulation_eval(req: EvalRequest):
     try:
-        from scrapi.evals import SimulationEvals
-        project_id = os.environ["PROJECT_ID"]
-        location = os.environ.get("LOCATION", "us-central1")
-        evals = SimulationEvals(project_id=project_id, location=location)
-        result = evals.run(agent_id=req.agent_id, eval_id=req.eval_id)
-        return {"status": "completed", "result": result}
+        from cxas_scrapi import SimulationEvals
+        project_id = req.project_id or os.getenv("PROJECT_ID", "")
+        evals = SimulationEvals(project_id=project_id, location=req.location, agent_id=req.agent_id)
+        result = evals.list_evals()
+        return {"evals": result if isinstance(result, list) else [], "status": "ok"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/turn")
-def run_turn_eval(req: EvalRequest):
+async def run_turn_eval(req: EvalRequest):
     try:
-        from scrapi.evals import TurnEvals
-        project_id = os.environ["PROJECT_ID"]
-        location = os.environ.get("LOCATION", "us-central1")
-        evals = TurnEvals(project_id=project_id, location=location)
-        result = evals.run(agent_id=req.agent_id, test_cases=req.test_cases or [])
-        return {"status": "completed", "result": result}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-@router.get("/list/{agent_id}")
-def list_evals(agent_id: str):
-    try:
-        from scrapi.evals import SimulationEvals
-        project_id = os.environ["PROJECT_ID"]
-        location = os.environ.get("LOCATION", "us-central1")
-        evals = SimulationEvals(project_id=project_id, location=location)
-        result = evals.list(agent_id=agent_id)
-        return {"evals": result}
+        from cxas_scrapi import TurnEvals
+        project_id = req.project_id or os.getenv("PROJECT_ID", "")
+        evals = TurnEvals(project_id=project_id, location=req.location, agent_id=req.agent_id)
+        result = evals.list_evals()
+        return {"evals": result if isinstance(result, list) else [], "status": "ok"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
