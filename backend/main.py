@@ -12,11 +12,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-from routers import agents, evals, lint, sessions
+from routers import agents, evals, lint, sessions, kpis
 app.include_router(agents.router)
 app.include_router(evals.router)
 app.include_router(lint.router)
 app.include_router(sessions.router)
+app.include_router(kpis.router)
 
 @app.get("/health")
 def health():

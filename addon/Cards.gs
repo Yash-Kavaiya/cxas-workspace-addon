@@ -125,6 +125,94 @@ function buildLintResultCard(result, agentId) {
   return card.build();
 }
 
+function buildKpiExportCard() {
+  var card = CardService.newCardBuilder()
+    .setHeader(buildHeader('Export KPIs to Sheets', 'CCAI Insights Metrics'));
+
+  var destSection = CardService.newCardSection().setHeader('Destination');
+  destSection.addWidget(
+    CardService.newTextInput()
+      .setFieldName('kpi_spreadsheet_id')
+      .setTitle('Google Spreadsheet ID')
+      .setHint('ID from the Sheets URL (or leave blank to create new)')
+  );
+  destSection.addWidget(
+    CardService.newTextInput()
+      .setFieldName('kpi_sheet_name')
+      .setTitle('Sheet Tab Name')
+      .setValue('KPIs')
+  );
+  destSection.addWidget(
+    CardService.newTextInput()
+      .setFieldName('kpi_spreadsheet_title')
+      .setTitle('New Spreadsheet Title (if creating new)')
+      .setValue('CXAS KPI Dashboard')
+  );
+  card.addSection(destSection);
+
+  var metricsSection = CardService.newCardSection().setHeader('Metrics & Filters');
+  metricsSection.addWidget(
+    CardService.newTextInput()
+      .setFieldName('kpi_metrics')
+      .setTitle('Metrics (comma-sep or "all")')
+      .setValue('all')
+      .setHint('conversation_count,avg_duration,agent_sentiment,customer_sentiment,topic_distribution,qa_scores')
+  );
+  metricsSection.addWidget(
+    CardService.newTextInput()
+      .setFieldName('kpi_aggregate_by')
+      .setTitle('Aggregate By')
+      .setHint('day | week | month | agent | queue | topic (leave blank for none)')
+  );
+  metricsSection.addWidget(
+    CardService.newTextInput()
+      .setFieldName('kpi_date_range')
+      .setTitle('Date Range')
+      .setHint('YYYY-MM-DD,YYYY-MM-DD (optional)')
+  );
+  metricsSection.addWidget(
+    CardService.newTextInput()
+      .setFieldName('kpi_filter')
+      .setTitle('CCAI Insights Filter')
+      .setHint('e.g. agent_id=agent123 (optional)')
+  );
+  card.addSection(metricsSection);
+
+  var actionSection = CardService.newCardSection().setHeader('Export');
+  actionSection.addWidget(
+    CardService.newTextButton()
+      .setText('📊 Export KPIs to Sheet')
+      .setOnClickAction(CardService.newAction().setFunctionName('submitKpiExport'))
+  );
+  card.addSection(actionSection);
+  return card.build();
+}
+
+function buildKpiResultCard(result) {
+  var card = CardService.newCardBuilder()
+    .setHeader(buildHeader('KPI Export', result.status === 'ok' ? '✅ Done' : '❌ Failed'));
+
+  var section = CardService.newCardSection().setHeader('Result');
+  if (result.status === 'ok') {
+    section.addWidget(CardService.newKeyValue()
+      .setTopLabel('Spreadsheet').setContent(result.spreadsheet_title || result.spreadsheet_id));
+    section.addWidget(CardService.newKeyValue()
+      .setTopLabel('Sheet Tab').setContent(result.sheet_name));
+    section.addWidget(
+      CardService.newTextButton()
+        .setText('🔗 Open Google Sheet')
+        .setOpenLink(CardService.newOpenLink()
+          .setUrl(result.sheet_url)
+          .setOpenAs(CardService.OpenAs.FULL_SIZE))
+    );
+  } else {
+    section.addWidget(CardService.newTextParagraph()
+      .setText('Error: ' + (result.detail || JSON.stringify(result))));
+  }
+  card.addSection(section);
+  return card.build();
+}
+
 function buildSettingsCard() {
   var card = CardService.newCardBuilder()
     .setHeader(buildHeader('Settings', 'CX Agent Studio'));

@@ -42,6 +42,10 @@ function buildDashboardCard() {
     CardService.newTextButton().setText('📊 Recent Sessions')
       .setOnClickAction(CardService.newAction().setFunctionName('promptSessions'))
   );
+  quickActions.addWidget(
+    CardService.newTextButton().setText('📈 Export KPIs to Sheets')
+      .setOnClickAction(CardService.newAction().setFunctionName('promptKpiExport'))
+  );
   card.addSection(quickActions);
 
   var footer = CardService.newCardSection().setHeader('Resources');
@@ -326,4 +330,53 @@ function listSessionsForAgent(e) {
 function listSessionsSubmit(e) {
   var agentId = e.formInputs.agent_id_sessions && e.formInputs.agent_id_sessions[0];
   return listSessionsForAgent({ parameters: { agentId: agentId } });
+}
+
+// ─── KPI Export ───────────────────────────────────────────────────────────────
+
+function promptKpiExport(e) {
+  return CardService.newActionResponseBuilder()
+    .setNavigation(CardService.newNavigation().pushCard(buildKpiExportCard()))
+    .build();
+}
+
+function submitKpiExport(e) {
+  var form = e.formInputs || {};
+  var spreadsheetId = (form.kpi_spreadsheet_id && form.kpi_spreadsheet_id[0]) || '';
+  var sheetName     = (form.kpi_sheet_name      && form.kpi_sheet_name[0])     || 'KPIs';
+  var metrics       = (form.kpi_metrics         && form.kpi_metrics[0])        || 'all';
+  var aggregateBy   = (form.kpi_aggregate_by    && form.kpi_aggregate_by[0])   || '';
+  var dateRange     = (form.kpi_date_range      && form.kpi_date_range[0])     || '';
+  var filter        = (form.kpi_filter          && form.kpi_filter[0])         || '';
+  var spreadTitle   = (form.kpi_spreadsheet_title && form.kpi_spreadsheet_title[0]) || 'CXAS KPI Dashboard';
+
+  try {
+    var payload = {
+      project_id:         getConfig('PROJECT_ID'),
+      location:           getConfig('LOCATION') || 'us-central1',
+      sheet_name:         sheetName,
+      metrics:            metrics,
+      append:             true,
+    };
+    if (aggregateBy) payload.aggregate_by = aggregateBy;
+    if (dateRange)   payload.date_range   = dateRange;
+    if (filter)      payload.filter       = filter;
+
+    var endpoint, result;
+    if (spreadsheetId) {
+      payload.spreadsheet_id = spreadsheetId;
+      result = callBackend('/kpis/export', 'POST', payload);
+    } else {
+      payload.spreadsheet_title = spreadTitle;
+      result = callBackend('/kpis/create-and-export', 'POST', payload);
+    }
+
+    return CardService.newActionResponseBuilder()
+      .setNavigation(CardService.newNavigation().pushCard(buildKpiResultCard(result)))
+      .build();
+  } catch (err) {
+    return CardService.newActionResponseBuilder()
+      .setNavigation(CardService.newNavigation().pushCard(buildErrorCard(err.message)))
+      .build();
+  }
 }
